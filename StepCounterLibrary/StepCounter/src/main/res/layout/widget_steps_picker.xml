@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_140sdp">
+
+
+    <com.shawnlin.numberpicker.NumberPicker
+        android:id="@+id/number_picker"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_140sdp"
+        android:layout_gravity="center"
+        app:np_dividerColor="@android:color/transparent"
+        app:np_height="180dp"
+        app:np_max="8000"
+        app:np_min="1000"
+        app:np_itemSpacing="0dp"
+        app:np_orientation="vertical"
+        app:np_selectedTypeface="@font/inter_18pt_bold"
+        app:np_typeface="@font/inter_18pt_bold"
+        app:np_selectedTextColor="@color/red"
+        app:np_selectedTextSize="@dimen/_24sdp"
+        app:np_textColor="@color/black"
+        app:np_textSize="@dimen/_14sdp"
+        app:np_value="5000"
+        app:np_width="64dp" />
+
+    <!-- Top Divider Line -->
+    <View
+        android:id="@+id/top_divider"
+        android:layout_width="@dimen/_200sdp"
+        android:layout_height="2dp"
+        android:layout_gravity="center|end"
+        android:layout_marginBottom="@dimen/_24sdp"
+        android:background="@drawable/line" />
+
+    <!-- Bottom Divider Line -->
+    <View
+        android:id="@+id/bottom_divider"
+        android:layout_width="@dimen/_200sdp"
+        android:layout_height="2dp"
+        android:layout_gravity="center|end"
+        android:layout_marginTop="@dimen/_24sdp"
+        android:background="@drawable/line" />
+
+    <!-- Label Text positioned to the right of center -->
+    <TextView
+        android:id="@+id/tvLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginEnd="@dimen/_50sdp"
+        android:clickable="false"
+        android:fontFamily="@font/inter_18pt_bold"
+        android:focusable="false"
+        android:text="@string/steps_large"
+        android:textColor="@color/startColor"
+        android:textSize="@dimen/_14sdp" />
+
+</FrameLayout>
