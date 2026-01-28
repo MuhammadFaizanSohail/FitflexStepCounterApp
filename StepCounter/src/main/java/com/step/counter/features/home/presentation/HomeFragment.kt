@@ -1,39 +1,35 @@
 package com.step.counter.features.home.presentation
 
-import java.time.LocalDate
-import java.time.DayOfWeek
 
-
+import android.animation.ValueAnimator
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.step.counter.databinding.FragmentHomeBinding
 import androidx.core.graphics.toColorInt
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
-import com.github.mikephil.charting.model.GradientColor
 import com.step.counter.R
 import com.step.counter.core.domain.model.Day
 import com.step.counter.core.utils.RoundedBarChartRenderer
+import com.step.counter.databinding.FragmentHomeBinding
 import com.step.counter.features.home.data.model.StatsDetailsState
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
-import java.time.format.DateTimeFormatter
-import kotlin.getValue
+import java.time.LocalDate
+import java.util.Calendar
 
 
 class HomeFragment : Fragment() {
@@ -47,8 +43,9 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private var isChartAnimated = false
     private var roundedRenderer: RoundedBarChartRenderer? = null
+    private var previousSteps: List<Float>? = null
+    private var chartValueAnimator: ValueAnimator? = null
 
 
     override fun onCreateView(
@@ -64,7 +61,7 @@ class HomeFragment : Fragment() {
         val today = LocalDate.now()
         val firstDayOfWeek = today.minusDays(today.dayOfWeek.value % 7L)
         statsChartPageViewModel.selectWeek(firstDayOfWeek)
-
+        setGreeting()
 
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -78,13 +75,31 @@ class HomeFragment : Fragment() {
         }
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                    viewModel.day.collect {
-                        Log.d("stats***", "onViewCreated: statsDetailsState: $it")
-                        updateUserInterface(it)
-                    }
+                viewModel.day.collect {
+                    Log.d("stats***", "onViewCreated: statsDetailsState: $it")
+                    updateUserInterface(it)
+                }
 
             }
         }
+
+        binding.menuBtn.setOnClickListener {
+            findNavController().navigate(R.id.homeFragmentToSettingsFragment)
+        }
+    }
+
+    private fun setGreeting() {
+        val calendar = Calendar.getInstance()
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+
+        val greeting = when (hour) {
+            in 5..11 -> getString(R.string.good_morning)
+            in 12..16 -> getString(R.string.good_afternoon)
+            in 17..20 -> getString(R.string.good_evening)
+            else -> getString(R.string.good_night)
+        }
+
+        binding.greetingText.text = greeting
     }
 
     private fun updateUserInterface(statsDetailsState: StatsDetailsState) =
@@ -121,43 +136,55 @@ class HomeFragment : Fragment() {
 
     private fun updateBarChart(barChart: BarChart, week: List<Day>) {
 
-        // 1️⃣ Prepare step values (Sun → Sat)
-        val steps = week.take(7).map { it.steps.toFloat() }
+        // 1️⃣ Prepare new step values (Sun → Sat)
+        val newSteps = week.take(7).map { it.steps.toFloat() }
         val gradientIndices = setOf(0, 2, 3, 5)
 
-        val entries = ArrayList<BarEntry>()
-        steps.forEachIndexed { index, value ->
-            entries.add(BarEntry(index.toFloat(), value))
-        }
-
-        val colors = steps.indices.map { index ->
+        val colors = newSteps.indices.map { index ->
             if (index in gradientIndices) gradientEnd else grayColor
         }
 
-        // 2️⃣ Update existing dataset OR create once
+        // 2️⃣ Setup initial OR Update existing dataset
         val barData = barChart.data
-        if (barData != null && barData.dataSetCount > 0) {
-
-            val dataSet = barData.getDataSetByIndex(0) as BarDataSet
-            dataSet.values = entries
-            dataSet.colors = colors
-
-            barData.notifyDataChanged()
-            barChart.notifyDataSetChanged()
-
+        val dataSet = if (barData != null && barData.dataSetCount > 0) {
+            barData.getDataSetByIndex(0) as BarDataSet
         } else {
+            val entries = newSteps.mapIndexed { index, _ -> BarEntry(index.toFloat(), 0f) }
+            val newDataSet = BarDataSet(entries, "")
+            newDataSet.colors = colors
+            newDataSet.setDrawValues(false)
 
-            val dataSet = BarDataSet(entries, "")
-            dataSet.colors = colors
-            dataSet.setDrawValues(false)
-
-            val newBarData = BarData(dataSet)
+            val newBarData = BarData(newDataSet)
             newBarData.barWidth = 0.5f
             barChart.data = newBarData
             barChart.setFitBars(true)
+            newDataSet
         }
+        dataSet.colors = colors
 
-        // 3️⃣ Set renderer ONCE
+        // 3️⃣ Smooth transition animation
+        chartValueAnimator?.cancel()
+        val startSteps = previousSteps ?: List(7) { 0f }
+
+        chartValueAnimator = ValueAnimator.ofFloat(0f, 1f).apply {
+            duration = 500
+            addUpdateListener { animator ->
+                val fraction = animator.animatedValue as Float
+                val animatedEntries = newSteps.mapIndexed { index, targetValue ->
+                    val startValue = startSteps.getOrElse(index) { 0f }
+                    val currentVal = startValue + (targetValue - startValue) * fraction
+                    BarEntry(index.toFloat(), currentVal)
+                }
+                dataSet.values = animatedEntries
+                barChart.data?.notifyDataChanged()
+                barChart.notifyDataSetChanged()
+                barChart.invalidate()
+            }
+            start()
+        }
+        previousSteps = newSteps
+
+        // 4️⃣ Set renderer ONCE
         if (roundedRenderer == null) {
             roundedRenderer = RoundedBarChartRenderer(
                 barChart,
@@ -171,66 +198,13 @@ class HomeFragment : Fragment() {
             barChart.renderer = roundedRenderer
         }
 
-        // 4️⃣ Axis & style
-        val maxSteps = steps.maxOrNull() ?: 0f
+        // 5️⃣ Axis & style
+        val maxSteps = newSteps.maxOrNull() ?: 0f
         configureXAxis(barChart)
         configureYAxis(barChart, maxSteps)
         styleChart(barChart)
 
-        // 5️⃣ Animate only ONCE
-        if (!isChartAnimated) {
-            barChart.animateY(800)
-            isChartAnimated = true
-        }
-
-        barChart.invalidate()
-    }
-
-
-    private fun setupBarChart(barChart: BarChart) {
-        val steps = listOf(4000f, 4500f, 3500f, 5600f, 4900f, 3100f, 3700f)
-        val gradientIndices = setOf(0, 2, 3, 5) // Indices that should have gradient
-
-        val entries = ArrayList<BarEntry>()
-        steps.forEachIndexed { index, value ->
-            entries.add(BarEntry(index.toFloat(), value))
-        }
-
-        val dataSet = BarDataSet(entries, "")
-
-        // Set colors for each bar
-        val colors = ArrayList<Int>()
-        steps.indices.forEach { index ->
-            if (index in gradientIndices) {
-                colors.add(gradientEnd)
-            } else {
-                colors.add(grayColor)
-            }
-        }
-        dataSet.colors = colors
-        dataSet.setDrawValues(false)
-
-        val barData = BarData(dataSet)
-        barData.barWidth = 0.5f
-
-        barChart.data = barData
-        barChart.setFitBars(true)
-
-        // Rounded bars renderer with gradient support
-        barChart.renderer = RoundedBarChartRenderer(
-            barChart,
-            barChart.animator,
-            barChart.viewPortHandler,
-            radius = 20f,
-            gradientIndices = gradientIndices,
-            gradientStart = gradientStart,
-            gradientEnd = gradientEnd
-        )
-
-        configureXAxis(barChart)
-        configureYAxis(barChart)
-        styleChart(barChart)
-
+        // 6️⃣ Initial animation handle removed (now handled by chartValueAnimator)
         barChart.invalidate()
     }
 
@@ -271,7 +245,6 @@ class HomeFragment : Fragment() {
             setScaleEnabled(false)
             setDrawGridBackground(false)
             setExtraOffsets(10f, 10f, 10f, 10f)
-            animateY(800)
         }
     }
 

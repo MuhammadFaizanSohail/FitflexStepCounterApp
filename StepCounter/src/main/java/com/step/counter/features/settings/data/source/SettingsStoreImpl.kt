@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import com.step.counter.features.settings.domain.model.Settings
+import androidx.core.content.edit
 
 class SettingsStoreImpl(
     private val sharedPreferences: SharedPreferences
@@ -45,5 +46,9 @@ class SettingsStoreImpl(
         key: String?
     ) {
         settings.value = parseSettings(sharedPreferences)
+    }
+
+    override suspend fun updateDailyGoal(goal: Int) {
+        sharedPreferences.edit { putString("daily_goal", goal.toString()) }
     }
 }

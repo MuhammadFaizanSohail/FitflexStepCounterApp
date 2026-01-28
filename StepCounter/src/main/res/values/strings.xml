@@ -24,5 +24,12 @@
         <item quantity="other">Steps</item>
     </plurals>
     <string name="kcal">kcal</string>
+    <string name="define_your_step_goal_and_get_moving">Define your step goal and get moving</string>
+    <string name="its_recommended_to_set_goal">Its recommended to set goal of at least 8000 steps a day</string>
+    <string name="get_started">Get Started</string>
+    <string name="steps_large">Steps</string>
+    <string name="good_afternoon">Good Afternoon 🌤️</string>
+    <string name="good_evening">Good Evening 🌆</string>
+    <string name="good_night">Good Night 🌙</string>
 
 </resources>

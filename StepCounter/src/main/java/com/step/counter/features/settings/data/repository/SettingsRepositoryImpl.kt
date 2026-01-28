@@ -12,4 +12,8 @@ class SettingsRepositoryImpl(
     override fun getSettings(): Flow<Settings> {
         return settingsStore.getSettings()
     }
+
+    override suspend fun updateDailyGoal(goal: Int) {
+        settingsStore.updateDailyGoal(goal)
+    }
 }

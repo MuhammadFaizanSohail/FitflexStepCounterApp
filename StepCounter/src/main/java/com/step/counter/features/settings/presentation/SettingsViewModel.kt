@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import com.step.counter.features.settings.data.repository.SettingsRepositoryImpl
 import com.step.counter.features.settings.domain.usecase.SettingsUseCases
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 class SettingsViewModel(
@@ -35,6 +36,14 @@ class SettingsViewModel(
                 )
             )
         }.launchIn(viewModelScope)
+    }
+
+    fun getSettings() = settingsUseCases.getSettings()
+
+    fun updateDailyGoal(goal: Int) {
+        viewModelScope.launch {
+            settingsUseCases.updateDailyGoal(goal)
+        }
     }
 
     companion object Factory : ViewModelProvider.Factory {

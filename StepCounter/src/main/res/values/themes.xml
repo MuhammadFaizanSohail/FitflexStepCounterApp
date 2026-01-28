@@ -6,4 +6,11 @@
 
     <style name="Theme.StepCounter" parent="Base.Theme.StepCounter" />
 
+    <style name="NumberPickerStyle">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="colorControlNormal">@android:color/transparent</item>
+        <!-- This helps with divider color on newer Android versions -->
+        <item name="android:colorControlNormal">@android:color/transparent</item>
+    </style>
 </resources>

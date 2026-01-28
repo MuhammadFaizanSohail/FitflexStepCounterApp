@@ -9,5 +9,6 @@ class SettingsUseCases(
 ) {
 
     val getSettings: GetSettings = GetSettingsImpl(settingsRepository)
+    val updateDailyGoal: UpdateDailyGoal = UpdateDailyGoalImpl(settingsRepository)
     val updateDaySettings: UpdateDaySettings = UpdateDaySettingsImpl(dayRepository)
 }

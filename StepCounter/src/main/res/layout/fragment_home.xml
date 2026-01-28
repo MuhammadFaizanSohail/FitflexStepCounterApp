@@ -53,14 +53,15 @@
                         android:text="@string/good_morning"
                         android:textColor="@color/black"
                         android:textSize="@dimen/_16sdp"
-                        android:textStyle="bold" />
+                        android:fontFamily="@font/inter_18pt_semi_bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/when_in_doubt_lets_take_a_walk"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/_10sdp" />
+                        android:textSize="@dimen/_10sdp"
+                        android:fontFamily="@font/inter_18pt_regular"/>
 
 
                 </LinearLayout>
@@ -108,6 +109,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/today_s_target"
                         android:textColor="@color/black"
+                        android:fontFamily="@font/inter_18pt_regular"
                         android:textSize="@dimen/_10sdp"
                         app:layout_constraintBottom_toTopOf="@id/todayTargetText"
                         app:layout_constraintEnd_toStartOf="@id/stepsIv"
@@ -121,7 +123,7 @@
                         android:text="@string/target_steps"
                         android:textColor="@color/black"
                         android:textSize="@dimen/_16sdp"
-                        android:textStyle="bold"
+                        android:fontFamily="@font/inter_18pt_semi_bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="@id/targetHeading"
                         app:layout_constraintStart_toStartOf="@id/targetHeading"
@@ -201,7 +203,7 @@
             android:text="@string/statistic"
             android:textColor="@color/black"
             android:textSize="@dimen/_14sdp"
-            android:textStyle="normal" />
+            android:fontFamily="@font/inter_18pt_regular" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -236,7 +238,7 @@
                     android:text="@string/total_steps"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12sdp"
-                    android:textStyle="bold" />
+                    android:fontFamily="@font/inter_18pt_bold" />
 
                 <com.github.mikephil.charting.charts.BarChart
                     android:id="@+id/barChart"

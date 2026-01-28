@@ -94,5 +94,6 @@ dependencies {
 
     coreLibraryDesugaring ("com.android.tools:desugar_jdk_libs:2.1.5")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation("io.github.ShawnLin013:number-picker:2.4.13")
 
 }

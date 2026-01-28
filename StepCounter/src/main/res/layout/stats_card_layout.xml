@@ -23,9 +23,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/_12sdp"
+        android:fontFamily="@font/inter_18pt_bold"
         android:gravity="center"
         android:textSize="@dimen/_12sdp"
-        android:textStyle="bold"
         tools:text="2 km" />
 
     <TextView
@@ -34,7 +34,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/_4sdp"
+        android:fontFamily="@font/inter_18pt_regular"
         android:gravity="center"
+        android:textColor="@color/black"
         android:textSize="@dimen/_10sdp"
         tools:text="@string/distance" />
 
