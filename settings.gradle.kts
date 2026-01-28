@@ -22,6 +22,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "StepCounterApp"
+rootProject.name = "StepCounterAppSample"
 include(":app")
 include(":StepCounter")
