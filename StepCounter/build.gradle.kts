@@ -102,9 +102,9 @@ publishing {
                     }
                 }
                 scm {
-                    connection = "scm:git:git://github.com/MuhammadFaizanSohail/StepCounter.git"
-                    developerConnection = "scm:git:ssh://github.com/MuhammadFaizanSohail/StepCounter.git"
-                    url = "http://github.com/MuhammadFaizanSohail/StepCounter/"
+                    connection = "scm:git:git://github.com/MuhammadFaizanSohail/StepCounterAppSample.git"
+                    developerConnection = "scm:git:ssh://github.com/MuhammadFaizanSohail/StepCounterAppSample.git"
+                    url = "http://github.com/MuhammadFaizanSohail/StepCounterAppSample/"
                 }
             }
         }
