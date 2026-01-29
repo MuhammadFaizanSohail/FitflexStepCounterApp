@@ -11,6 +11,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.step.counter.core.service.StepCounterService
 import com.step.counter.core.utils.extensions.setInsets
+import com.step.counter.databinding.ActivityMainBinding
 
 
 class StepCounterMainActivity : FragmentActivity() {
@@ -21,8 +22,9 @@ class StepCounterMainActivity : FragmentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        setContentView(R.layout.activity_main)
-        setInsets(findViewById<ConstraintLayout>(R.id.mainLayout))
+        val binding = ActivityMainBinding.inflate(layoutInflater)
+        setInsets(binding.root)
+        setContentView(binding.root)
 
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
