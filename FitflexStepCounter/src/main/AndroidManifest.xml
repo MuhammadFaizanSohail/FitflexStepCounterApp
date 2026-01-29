@@ -10,7 +10,6 @@
         android:required="true" />
 
     <application
-        android:name=".ApplicationClass"
         android:hardwareAccelerated="true"
         android:largeHeap="true">
 

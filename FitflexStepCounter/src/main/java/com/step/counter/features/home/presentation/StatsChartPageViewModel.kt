@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.step.counter.ApplicationClass
+import com.step.counter.StepCounter
 import com.step.counter.core.data.repository.DayRepositoryImpl
 import com.step.counter.core.domain.model.Day
 import com.step.counter.features.home.domain.usecase.StatsChartPageUseCases
@@ -39,12 +39,12 @@ class StatsChartPageViewModel(
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
-            val application =
-                checkNotNull(extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY]) as ApplicationClass
+            val application = checkNotNull(extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY])
+            StepCounter.init(application)
 
-            val forestDatabase = application.stepCounterDatabase
+            val forestDatabase = StepCounter.stepCounterDatabase
             val dayRepository = DayRepositoryImpl(forestDatabase.dayDao)
-            val settingsStore = application.settingsStore
+            val settingsStore = StepCounter.settingsStore
             val settingsRepository = SettingsRepositoryImpl(settingsStore)
             val statsChartPageUseCases = StatsChartPageUseCases(dayRepository, settingsRepository)
 

@@ -22,7 +22,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "StepCounterAppSample"
+rootProject.name = "FitflexStepCounterApp"
 include(":app")
-include(":StepCounter")
+include(":FitflexStepCounter")
 //include(":myFusedLibrary")

@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.step.counter.ApplicationClass
+import com.step.counter.StepCounter
 import com.step.counter.core.data.repository.DayRepositoryImpl
 import com.step.counter.core.domain.model.DaySettings
 import kotlinx.coroutines.Job
@@ -50,11 +50,12 @@ class SettingsViewModel(
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
-            val application = checkNotNull(extras[APPLICATION_KEY]) as ApplicationClass
+            val application = checkNotNull(extras[APPLICATION_KEY])
+            StepCounter.init(application)
 
-            val settingsStore = application.settingsStore
+            val settingsStore = StepCounter.settingsStore
             val settingsRepository = SettingsRepositoryImpl(settingsStore)
-            val dayDatabase = application.stepCounterDatabase
+            val dayDatabase = StepCounter.stepCounterDatabase
             val dayRepository = DayRepositoryImpl(dayDatabase.dayDao)
 
             val settingsUseCases = SettingsUseCases(settingsRepository, dayRepository)

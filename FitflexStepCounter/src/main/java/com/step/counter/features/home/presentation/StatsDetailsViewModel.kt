@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.step.counter.ApplicationClass
+import com.step.counter.StepCounter
 import com.step.counter.core.data.repository.DayRepositoryImpl
 import com.step.counter.core.domain.usecase.DayUseCases
 import com.step.counter.features.home.data.model.StatsDetailsState
@@ -69,11 +69,12 @@ class StatsDetailsViewModel(
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
-            val application = checkNotNull(extras[APPLICATION_KEY]) as ApplicationClass
+            val application = checkNotNull(extras[APPLICATION_KEY])
+            StepCounter.init(application)
 
-            val dayDatabase = application.stepCounterDatabase
+            val dayDatabase = StepCounter.stepCounterDatabase
             val dayRepository = DayRepositoryImpl(dayDatabase.dayDao)
-            val settingsStore = application.settingsStore
+            val settingsStore = StepCounter.settingsStore
             val settingsRepository = SettingsRepositoryImpl(settingsStore)
             val dayUseCases = DayUseCases(dayRepository, settingsRepository)
             val statsDetailsUseCases = StatsDetailsUseCases(dayRepository)
@@ -81,7 +82,7 @@ class StatsDetailsViewModel(
             return StatsDetailsViewModel(
                 dayUseCases,
                 statsDetailsUseCases,
-                application.currentDate
+                StepCounter.currentDate
             ) as T
         }
     }

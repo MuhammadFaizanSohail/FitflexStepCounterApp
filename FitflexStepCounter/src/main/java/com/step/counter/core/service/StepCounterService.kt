@@ -17,9 +17,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.step.counter.ApplicationClass
 import com.step.counter.StepCounterMainActivity
 import com.step.counter.R
+import com.step.counter.StepCounter
 import com.step.counter.core.data.repository.DayRepositoryImpl
 import com.step.counter.core.domain.usecase.DayUseCases
 import com.step.counter.features.settings.data.repository.SettingsRepositoryImpl
@@ -48,15 +48,15 @@ class StepCounterService : LifecycleService(), SensorEventListener {
         registerStepCounter(sensorManager)
 
         // Initialise controller
-        val application = application as ApplicationClass
+        StepCounter.init(this)
 
-        val settingsStore = application.settingsStore
+        val settingsStore = StepCounter.settingsStore
         val settingsRepository = SettingsRepositoryImpl(settingsStore)
-        val dayDatabase = application.stepCounterDatabase
+        val dayDatabase = StepCounter.stepCounterDatabase
         val dayRepository = DayRepositoryImpl(dayDatabase.dayDao)
         val dayUseCases = DayUseCases(dayRepository, settingsRepository)
 
-        controller = StepCounterController(dayUseCases, lifecycleScope, application.currentDate)
+        controller = StepCounterController(dayUseCases, lifecycleScope, StepCounter.currentDate)
 
         // Create notification
         val notification = createNotification(controller.stats.value)
