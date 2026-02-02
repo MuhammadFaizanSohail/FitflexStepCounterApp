@@ -25,4 +25,3 @@ dependencyResolutionManagement {
 rootProject.name = "FitflexStepCounterApp"
 include(":app")
 include(":FitflexStepCounter")
-//include(":myFusedLibrary")

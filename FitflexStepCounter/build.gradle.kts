@@ -5,6 +5,7 @@ import java.io.FileInputStream
 plugins {
     id("com.android.library")
     id("com.google.devtools.ksp")
+    id("org.jetbrains.kotlin.android")
     id("androidx.room")
     id("maven-publish")
 }
@@ -103,8 +104,10 @@ publishing {
                 }
 
                 scm {
-                    connection = "scm:git:git://github.com/MuhammadFaizanSohail/FitflexStepCounterApp.git"
-                    developerConnection = "scm:git:ssh://github.com/MuhammadFaizanSohail/FitflexStepCounterApp.git"
+                    connection =
+                        "scm:git:git://github.com/MuhammadFaizanSohail/FitflexStepCounterApp.git"
+                    developerConnection =
+                        "scm:git:ssh://github.com/MuhammadFaizanSohail/FitflexStepCounterApp.git"
                     url = "http://github.com/MuhammadFaizanSohail/FitflexStepCounterApp/"
                 }
             }
