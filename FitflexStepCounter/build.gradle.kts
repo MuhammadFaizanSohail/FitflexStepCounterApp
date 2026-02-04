@@ -73,7 +73,7 @@ kotlin {
 publishing {
     publications {
         create<MavenPublication>("release") {
-            groupId = "com.github.muhammadfaizansohail"
+            groupId = "com.github.rehanalamkhan"
             artifactId = "stepcounter"
             version = "1.0.0"
 
@@ -84,7 +84,7 @@ publishing {
             pom {
                 name.set("stepcounter")
                 description.set("app for step counter")
-                url.set("https://github.com/MuhammadFaizanSohail/FitflexStepCounterApp.git")
+                url.set("https://github.com/rehanalamkhan/FitflexStepCounterApp.git")
 
                 licenses {
                     license {
@@ -103,10 +103,10 @@ publishing {
 
                 scm {
                     connection =
-                        "scm:git:git://github.com/MuhammadFaizanSohail/FitflexStepCounterApp.git"
+                        "scm:git:git://github.com/rehanalamkhan/FitflexStepCounterApp.git"
                     developerConnection =
-                        "scm:git:ssh://github.com/MuhammadFaizanSohail/FitflexStepCounterApp.git"
-                    url = "http://github.com/MuhammadFaizanSohail/FitflexStepCounterApp/"
+                        "scm:git:ssh://github.com/rehanalamkhan/FitflexStepCounterApp.git"
+                    url = "http://github.com/rehanalamkhan/FitflexStepCounterApp/"
                 }
             }
         }
